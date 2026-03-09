@@ -3,137 +3,398 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Distancia entre Aeropuertos</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Calculadora de Distancia — Aeropuertos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Sora', sans-serif;
+            background: #FAFAF8;
+            color: #1A1A1A;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* TOP BAR */
+        .topbar {
+            background: #1A1A1A;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .topbar-dot {
+            width: 10px; height: 10px;
+            background: #F5C800;
+            border-radius: 50%;
+        }
+
+        .topbar-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: 0.05em;
+        }
+
+        .topbar-sep { color: #444; margin: 0 0.3rem; }
+
+        .topbar-sub {
+            font-size: 0.75rem;
+            color: #666;
+            font-weight: 300;
+        }
+
+        /* MAIN */
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1.5rem;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 520px;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.07);
+            overflow: hidden;
+        }
+
+        /* CARD HEADER */
+        .card-header {
+            background: #F5C800;
+            padding: 2rem 2.5rem 1.75rem;
+        }
+
+        .card-header-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.6rem;
+            display: block;
+        }
+
+        .card-header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1A1A1A;
+            line-height: 1.2;
+        }
+
+        .card-header p {
+            font-size: 0.82rem;
+            color: rgba(26,26,26,0.6);
+            margin-top: 0.4rem;
+            font-weight: 400;
+        }
+
+        /* CARD BODY */
+        .card-body {
+            padding: 2rem 2.5rem;
+        }
+
+        .field { margin-bottom: 1.2rem; }
+
+        label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 0.45rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1.5px solid #E8E8E8;
+            border-radius: 10px;
+            font-family: 'Sora', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1A1A1A;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #FAFAF8;
+        }
+
+        input[type="text"]::placeholder {
+            color: #CCC;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+        }
+
+        input[type="text"]:focus {
+            border-color: #F5C800;
+            box-shadow: 0 0 0 3px rgba(245,200,0,0.15);
+            background: #fff;
+        }
+
+        .hint {
+            font-size: 0.68rem;
+            color: #BBB;
+            margin-top: 0.35rem;
+        }
+
+        /* DIVIDER */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 0.4rem 0 1.2rem;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: #EBEBEB;
+        }
+
+        .divider-icon {
+            font-size: 1rem;
+            color: #CCC;
+        }
+
+        /* BUTTON */
+        .btn {
+            width: 100%;
+            background: #1A1A1A;
+            color: #F5C800;
+            border: none;
+            border-radius: 10px;
+            padding: 0.95rem;
+            font-family: 'Sora', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            margin-top: 0.4rem;
+        }
+
+        .btn:hover { background: #2C2C2C; transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
+
+        /* ERROR */
+        .error-box {
+            margin-top: 1.2rem;
+            background: #FFF5F5;
+            border: 1px solid #FED7D7;
+            border-radius: 10px;
+            padding: 0.85rem 1rem;
+            font-size: 0.82rem;
+            color: #C53030;
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-start;
+        }
+
+        /* RESULTS */
+        .results {
+            margin-top: 1.5rem;
+            border-top: 1.5px solid #F0F0F0;
+            padding-top: 1.5rem;
+        }
+
+        .results-title {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #AAA;
+            margin-bottom: 1.2rem;
+        }
+
+        /* ROUTE ROW */
+        .route-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            background: #FAFAF8;
+            border-radius: 12px;
+            padding: 1rem 1.1rem;
+            border: 1px solid #F0F0F0;
+        }
+
+        .route-airport {
+            flex: 1;
+        }
+
+        .route-code {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #1A1A1A;
+            line-height: 1;
+        }
+
+        .route-name {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 0.2rem;
+            line-height: 1.3;
+        }
+
+        .route-arrow {
+            color: #F5C800;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        /* DISTANCE CARDS */
+        .dist-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+        }
+
+        .dist-card {
+            background: #FAFAF8;
+            border: 1px solid #EBEBEB;
+            border-radius: 12px;
+            padding: 1rem 0.75rem;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+
+        .dist-card:hover { border-color: #F5C800; }
+
+        .dist-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1A1A1A;
+        }
+
+        .dist-label {
+            font-size: 0.65rem;
+            color: #AAA;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 0.25rem;
+            font-weight: 600;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.72rem;
+            color: #CCC;
+        }
+
+        @media (max-width: 480px) {
+            .card-body { padding: 1.5rem; }
+            .card-header { padding: 1.5rem; }
+            .dist-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
-<body class="bg-light">
+<body>
 
-    <div class="container mt-5" style="max-width: 680px;">
-
-        <div class="text-center mb-4">
-            <h1 class="fw-bold text-primary">✈ Calculadora de Distancia</h1>
-            <p class="text-muted">Ingresa dos códigos IATA para calcular la distancia entre aeropuertos</p>
-        </div>
-
-        <div class="card shadow-sm mb-4">
-            <div class="card-body p-4">
-                <form method="POST" action="">
-                    {% csrf_token %}
-                    <div class="row g-3">
-                        <div class="col-md-5">
-                            <label for="aeropuerto_origen" class="form-label fw-semibold">Aeropuerto Origen</label>
-                            <input 
-                                type="text" 
-                                id="aeropuerto_origen" 
-                                name="aeropuerto_origen" 
-                                class="form-control form-control-lg text-uppercase text-center fw-bold" 
-                                placeholder="BOG" 
-                                maxlength="3" 
-                                value="{{ aeropuerto_origen }}" 
-                                required
-                            >
-                            <div class="form-text text-center">Ej: BOG, JFK, MAD</div>
-                        </div>
-
-                        <div class="col-md-2 d-flex align-items-center justify-content-center pt-3">
-                            <span class="fs-3 text-muted">✈</span>
-                        </div>
-
-                        <div class="col-md-5">
-                            <label for="aeropuerto_destino" class="form-label fw-semibold">Aeropuerto Destino</label>
-                            <input 
-                                type="text" 
-                                id="aeropuerto_destino" 
-                                name="aeropuerto_destino" 
-                                class="form-control form-control-lg text-uppercase text-center fw-bold" 
-                                placeholder="MEX" 
-                                maxlength="3" 
-                                value="{{ aeropuerto_destino }}" 
-                                required
-                            >
-                            <div class="form-text text-center">Ej: MEX, LHR, NRT</div>
-                        </div>
-                    </div>
-
-                    <div class="d-grid mt-4">
-                        <button type="submit" class="btn btn-primary btn-lg">Calcular Distancia</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        {% if error %}
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>⚠ Error:</strong> {{ error }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endif %}
-
-        {% if resultado %}
-        <div class="card shadow">
-            <div class="card-header bg-success text-white">
-                <h5 class="mb-0">✅ Resultados del Cálculo</h5>
-            </div>
-            <div class="card-body p-4">
-                
-                <div class="row mb-3">
-                    <div class="col-md-5">
-                        <p class="text-muted small mb-1 text-uppercase fw-semibold">Origen</p>
-                        <p class="mb-0">
-                            <span class="badge bg-primary fs-6 me-2">{{ resultado.aeropuerto_origen.codigo }}</span>
-                            <strong>{{ resultado.aeropuerto_origen.nombre }}</strong>
-                        </p>
-                        <p class="text-muted small mt-1">
-                            {{ resultado.aeropuerto_origen.ciudad }}, {{ resultado.aeropuerto_origen.pais }}
-                        </p>
-                    </div>
-
-                    <div class="col-md-2 d-flex align-items-center justify-content-center">
-                        <span class="fs-2 text-primary">✈</span>
-                    </div>
-
-                    <div class="col-md-5">
-                        <p class="text-muted small mb-1 text-uppercase fw-semibold">Destino</p>
-                        <p class="mb-0">
-                            <span class="badge bg-primary fs-6 me-2">{{ resultado.aeropuerto_destino.codigo }}</span>
-                            <strong>{{ resultado.aeropuerto_destino.nombre }}</strong>
-                        </p>
-                        <p class="text-muted small mt-1">
-                            {{ resultado.aeropuerto_destino.ciudad }}, {{ resultado.aeropuerto_destino.pais }}
-                        </p>
-                    </div>
-                </div>
-
-                <hr>
-
-                <h6 class="text-muted text-uppercase fw-semibold mb-3">📏 Distancias Calculadas</h6>
-                <div class="row g-3 text-center">
-                    <div class="col-md-4">
-                        <div class="p-3 bg-light rounded border">
-                            <div class="fs-4 fw-bold text-primary">{{ resultado.distancia_km }}</div>
-                            <div class="text-muted small">Kilómetros</div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="p-3 bg-light rounded border">
-                            <div class="fs-4 fw-bold text-primary">{{ resultado.distancia_millas }}</div>
-                            <div class="text-muted small">Millas</div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="p-3 bg-light rounded border">
-                            <div class="fs-4 fw-bold text-primary">{{ resultado.distancia_millas_nauticas }}</div>
-                            <div class="text-muted small">Millas Náuticas</div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        {% endif %}
-
+    <div class="topbar">
+        <div class="topbar-dot"></div>
+        <span class="topbar-name">AeroDistancia</span>
+        <span class="topbar-sep">·</span>
+        <span class="topbar-sub">Powered by AirportGap API</span>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <main>
+        <div class="card">
+
+            <div class="card-header">
+                <span class="card-header-icon">✈</span>
+                <h1>Calculadora de Distancia</h1>
+                <p>Ingresa dos códigos IATA para calcular la ruta</p>
+            </div>
+
+            <div class="card-body">
+                <form method="POST" action="">
+                    {% csrf_token %}
+
+                    <div class="field">
+                        <label for="aeropuerto_origen">Aeropuerto Origen</label>
+                        <input type="text" id="aeropuerto_origen" name="aeropuerto_origen"
+                            placeholder="BOG" maxlength="3"
+                            value="{{ aeropuerto_origen }}" required autocomplete="off">
+                        <div class="hint">Ej: BOG, JFK, MAD</div>
+                    </div>
+
+                    <div class="divider">
+                        <div class="divider-line"></div>
+                        <div class="divider-icon">✈</div>
+                        <div class="divider-line"></div>
+                    </div>
+
+                    <div class="field">
+                        <label for="aeropuerto_destino">Aeropuerto Destino</label>
+                        <input type="text" id="aeropuerto_destino" name="aeropuerto_destino"
+                            placeholder="MEX" maxlength="3"
+                            value="{{ aeropuerto_destino }}" required autocomplete="off">
+                        <div class="hint">Ej: MEX, LHR, NRT</div>
+                    </div>
+
+                    <button type="submit" class="btn">Calcular Distancia</button>
+                </form>
+
+                {% if error %}
+                <div class="error-box">
+                    <span>⚠</span>
+                    <span>{{ error }}</span>
+                </div>
+                {% endif %}
+
+                {% if resultado %}
+                <div class="results">
+                    <div class="results-title">Resultado</div>
+
+                    <div class="route-row">
+                        <div class="route-airport">
+                            <div class="route-code">{{ resultado.aeropuerto_origen.codigo }}</div>
+                            <div class="route-name">{{ resultado.aeropuerto_origen.nombre }}<br>{{ resultado.aeropuerto_origen.ciudad }}, {{ resultado.aeropuerto_origen.pais }}</div>
+                        </div>
+                        <div class="route-arrow">→</div>
+                        <div class="route-airport" style="text-align:right;">
+                            <div class="route-code">{{ resultado.aeropuerto_destino.codigo }}</div>
+                            <div class="route-name">{{ resultado.aeropuerto_destino.nombre }}<br>{{ resultado.aeropuerto_destino.ciudad }}, {{ resultado.aeropuerto_destino.pais }}</div>
+                        </div>
+                    </div>
+
+                    <div class="dist-grid">
+                        <div class="dist-card">
+                            <div class="dist-value">{{ resultado.distancia_km }}</div>
+                            <div class="dist-label">Kilómetros</div>
+                        </div>
+                        <div class="dist-card">
+                            <div class="dist-value">{{ resultado.distancia_millas }}</div>
+                            <div class="dist-label">Millas</div>
+                        </div>
+                        <div class="dist-card">
+                            <div class="dist-value">{{ resultado.distancia_millas_nauticas }}</div>
+                            <div class="dist-label">Náuticas</div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </main>
+
+    <footer>Calculadora de Rutas Aéreas · AirportGap API</footer>
+
+    <script>
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.addEventListener('input', function() {
+                this.value = this.value.toUpperCase().replace(/[^A-Z]/g, '');
+            });
+        });
+    </script>
+
 </body>
 </html>
