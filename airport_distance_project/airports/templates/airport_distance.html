@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Distancia entre Aeropuertos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <div class="container mt-5" style="max-width: 680px;">
+
+        <div class="text-center mb-4">
+            <h1 class="fw-bold text-primary">✈ Calculadora de Distancia</h1>
+            <p class="text-muted">Ingresa dos códigos IATA para calcular la distancia entre aeropuertos</p>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-4">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-5">
+                            <label for="aeropuerto_origen" class="form-label fw-semibold">Aeropuerto Origen</label>
+                            <input 
+                                type="text" 
+                                id="aeropuerto_origen" 
+                                name="aeropuerto_origen" 
+                                class="form-control form-control-lg text-uppercase text-center fw-bold" 
+                                placeholder="BOG" 
+                                maxlength="3" 
+                                value="{{ aeropuerto_origen }}" 
+                                required
+                            >
+                            <div class="form-text text-center">Ej: BOG, JFK, MAD</div>
+                        </div>
+
+                        <div class="col-md-2 d-flex align-items-center justify-content-center pt-3">
+                            <span class="fs-3 text-muted">✈</span>
+                        </div>
+
+                        <div class="col-md-5">
+                            <label for="aeropuerto_destino" class="form-label fw-semibold">Aeropuerto Destino</label>
+                            <input 
+                                type="text" 
+                                id="aeropuerto_destino" 
+                                name="aeropuerto_destino" 
+                                class="form-control form-control-lg text-uppercase text-center fw-bold" 
+                                placeholder="MEX" 
+                                maxlength="3" 
+                                value="{{ aeropuerto_destino }}" 
+                                required
+                            >
+                            <div class="form-text text-center">Ej: MEX, LHR, NRT</div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">Calcular Distancia</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {% if error %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>⚠ Error:</strong> {{ error }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+
+        {% if resultado %}
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">✅ Resultados del Cálculo</h5>
+            </div>
+            <div class="card-body p-4">
+                
+                <div class="row mb-3">
+                    <div class="col-md-5">
+                        <p class="text-muted small mb-1 text-uppercase fw-semibold">Origen</p>
+                        <p class="mb-0">
+                            <span class="badge bg-primary fs-6 me-2">{{ resultado.aeropuerto_origen.codigo }}</span>
+                            <strong>{{ resultado.aeropuerto_origen.nombre }}</strong>
+                        </p>
+                        <p class="text-muted small mt-1">
+                            {{ resultado.aeropuerto_origen.ciudad }}, {{ resultado.aeropuerto_origen.pais }}
+                        </p>
+                    </div>
+
+                    <div class="col-md-2 d-flex align-items-center justify-content-center">
+                        <span class="fs-2 text-primary">✈</span>
+                    </div>
+
+                    <div class="col-md-5">
+                        <p class="text-muted small mb-1 text-uppercase fw-semibold">Destino</p>
+                        <p class="mb-0">
+                            <span class="badge bg-primary fs-6 me-2">{{ resultado.aeropuerto_destino.codigo }}</span>
+                            <strong>{{ resultado.aeropuerto_destino.nombre }}</strong>
+                        </p>
+                        <p class="text-muted small mt-1">
+                            {{ resultado.aeropuerto_destino.ciudad }}, {{ resultado.aeropuerto_destino.pais }}
+                        </p>
+                    </div>
+                </div>
+
+                <hr>
+
+                <h6 class="text-muted text-uppercase fw-semibold mb-3">📏 Distancias Calculadas</h6>
+                <div class="row g-3 text-center">
+                    <div class="col-md-4">
+                        <div class="p-3 bg-light rounded border">
+                            <div class="fs-4 fw-bold text-primary">{{ resultado.distancia_km }}</div>
+                            <div class="text-muted small">Kilómetros</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 bg-light rounded border">
+                            <div class="fs-4 fw-bold text-primary">{{ resultado.distancia_millas }}</div>
+                            <div class="text-muted small">Millas</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 bg-light rounded border">
+                            <div class="fs-4 fw-bold text-primary">{{ resultado.distancia_millas_nauticas }}</div>
+                            <div class="text-muted small">Millas Náuticas</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

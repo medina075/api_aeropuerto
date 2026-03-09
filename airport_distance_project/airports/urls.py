@@ -1,0 +1,8 @@
+from django.urls import path
+from . import views
+
+app_name = 'airports'
+
+urlpatterns = [
+    path('', views.airport_distance_view, name='airport_distance'),
+]
